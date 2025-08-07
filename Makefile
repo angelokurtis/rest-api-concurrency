@@ -11,7 +11,7 @@ COMPOSE = docker compose
 COMPOSE_FILE = compose.yaml
 
 WIRE = go tool -modfile=tools.mod wire
-MIGRATE = go tool -modfile=tools.mod migrate
+MIGRATE = go run -mod=mod -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.3
 
 ##@ Help
 
@@ -23,39 +23,39 @@ help: ## Display this help.
 
 .PHONY: wire
 wire: ## Generate wire dependency injection code
-	$(WIRE) ./cmd/app
+	@$(WIRE) ./cmd/app
 
 ##@ Database
 
 .PHONY: migrate-up
 migrate-up: ## Run DB migrations
-	$(MIGRATE) -path db/migrations -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/$(POSTGRES_DB)?sslmode=disable" up
+	@$(MIGRATE) -path db/migrations -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/$(POSTGRES_DB)?sslmode=disable" up
 
 .PHONY: migrate-down
 migrate-down: ## Roll back last DB migration
-	$(MIGRATE) -path db/migrations -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/$(POSTGRES_DB)?sslmode=disable" down 1
+	@$(MIGRATE) -path db/migrations -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/$(POSTGRES_DB)?sslmode=disable" down 1
 
 ##@ Docker Compose
 
 .PHONY: up
 up: ## Start Docker Compose in detached mode
-	$(COMPOSE) -f $(COMPOSE_FILE) up -d
+	@$(COMPOSE) -f $(COMPOSE_FILE) up -d
 
 .PHONY: down
 down: ## Stop and remove containers
-	$(COMPOSE) -f $(COMPOSE_FILE) down
+	@$(COMPOSE) -f $(COMPOSE_FILE) down
 
 .PHONY: logs
 logs: ## Follow container logs
-	$(COMPOSE) -f $(COMPOSE_FILE) logs -f
+	@$(COMPOSE) -f $(COMPOSE_FILE) logs -f
 
 .PHONY: ps
 ps: ## Show status of containers
-	$(COMPOSE) -f $(COMPOSE_FILE) ps
+	@$(COMPOSE) -f $(COMPOSE_FILE) ps
 
 .PHONY: restart
 restart: down up ## Restart containers
 
 .PHONY: clean
 clean: ## Remove containers and volumes
-	$(COMPOSE) -f $(COMPOSE_FILE) down -v
+	@$(COMPOSE) -f $(COMPOSE_FILE) down -v
