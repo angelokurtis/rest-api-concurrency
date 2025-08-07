@@ -2,7 +2,10 @@ module github.com/angelokurtis/rest-api-concurrency/tools
 
 go 1.24.6
 
-tool github.com/golang-migrate/migrate/v4/cmd/migrate
+tool (
+	github.com/golang-migrate/migrate/v4/cmd/migrate
+	github.com/google/wire/cmd/wire
+)
 
 require (
 	cloud.google.com/go v0.112.1 // indirect
@@ -74,7 +77,9 @@ require (
 	github.com/google/go-github/v39 v39.2.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
+	github.com/google/subcommands v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/google/wire v0.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.12.2 // indirect
 	github.com/gsterjov/go-libsecret v0.0.0-20161001094733-a6f4afe4910c // indirect
