@@ -9,5 +9,5 @@ sql:
         out: "../internal/postgres"
         emit_interface: true
         emit_json_tags: false
-        emit_empty_slices: true
+        emit_empty_slices: false
         emit_prepared_queries: false

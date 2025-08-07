@@ -74,7 +74,7 @@ func (q *Queries) ListClusters(ctx context.Context) ([]Cluster, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Cluster{}
+	var items []Cluster
 	for rows.Next() {
 		var i Cluster
 		if err := rows.Scan(
