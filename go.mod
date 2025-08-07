@@ -5,11 +5,10 @@ go 1.24.6
 require (
 	github.com/charmbracelet/glamour v0.10.0
 	github.com/goccy/go-yaml v1.18.0
-	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
 	github.com/jackc/pgx/v5 v5.7.5
 	go.uber.org/automaxprocs v1.6.0
-	golang.org/x/sync v0.15.0
+	golang.org/x/sync v0.16.0
 )
 
 require (

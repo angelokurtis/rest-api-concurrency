@@ -5,19 +5,17 @@
 package postgres
 
 import (
-	"time"
-
-	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Cluster struct {
-	ID        uuid.UUID
+	ID        pgtype.UUID
 	Name      string
 	Version   string
 	Provider  string
 	Region    string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt pgtype.Timestamp
+	UpdatedAt pgtype.Timestamp
 }
 
 type SchemaMigration struct {

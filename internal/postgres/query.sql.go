@@ -8,7 +8,7 @@ package postgres
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createCluster = `-- name: CreateCluster :one
@@ -24,7 +24,7 @@ type CreateClusterParams struct {
 }
 
 func (q *Queries) CreateCluster(ctx context.Context, arg CreateClusterParams) (Cluster, error) {
-	row := q.db.QueryRowContext(ctx, createCluster,
+	row := q.db.QueryRow(ctx, createCluster,
 		arg.Name,
 		arg.Version,
 		arg.Provider,
@@ -49,8 +49,8 @@ FROM clusters
 WHERE id = $1
 `
 
-func (q *Queries) DeleteCluster(ctx context.Context, id uuid.UUID) error {
-	_, err := q.db.ExecContext(ctx, deleteCluster, id)
+func (q *Queries) DeleteCluster(ctx context.Context, id pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, deleteCluster, id)
 	return err
 }
 
@@ -60,8 +60,8 @@ FROM clusters
 WHERE id = $1
 `
 
-func (q *Queries) GetCluster(ctx context.Context, id uuid.UUID) (Cluster, error) {
-	row := q.db.QueryRowContext(ctx, getCluster, id)
+func (q *Queries) GetCluster(ctx context.Context, id pgtype.UUID) (Cluster, error) {
+	row := q.db.QueryRow(ctx, getCluster, id)
 	var i Cluster
 	err := row.Scan(
 		&i.ID,
@@ -82,7 +82,7 @@ ORDER BY created_at DESC
 `
 
 func (q *Queries) ListClusters(ctx context.Context) ([]Cluster, error) {
-	rows, err := q.db.QueryContext(ctx, listClusters)
+	rows, err := q.db.Query(ctx, listClusters)
 	if err != nil {
 		return nil, err
 	}
@@ -103,9 +103,6 @@ func (q *Queries) ListClusters(ctx context.Context) ([]Cluster, error) {
 		}
 		items = append(items, i)
 	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
@@ -123,7 +120,7 @@ WHERE id = $1 RETURNING id, name, version, provider, region, created_at, updated
 `
 
 type UpdateClusterParams struct {
-	ID       uuid.UUID
+	ID       pgtype.UUID
 	Name     string
 	Version  string
 	Provider string
@@ -131,7 +128,7 @@ type UpdateClusterParams struct {
 }
 
 func (q *Queries) UpdateCluster(ctx context.Context, arg UpdateClusterParams) (Cluster, error) {
-	row := q.db.QueryRowContext(ctx, updateCluster,
+	row := q.db.QueryRow(ctx, updateCluster,
 		arg.ID,
 		arg.Name,
 		arg.Version,
