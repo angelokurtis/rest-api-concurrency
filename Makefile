@@ -15,6 +15,7 @@ WIRE = go tool -modfile=tools.mod wire
 # `go tool` does not respect build tags (like `postgres`), which causes a missing driver error.
 # See: https://github.com/golang-migrate/migrate/issues/1232
 MIGRATE = go run -mod=mod -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.3
+SQLC = go tool -modfile=tools.mod sqlc
 
 ##@ Help
 
@@ -29,6 +30,10 @@ wire: ## Generate wire dependency injection code
 	@$(WIRE) ./cmd/app
 
 ##@ Database
+
+.PHONY: sqlc-generate
+sqlc-generate: ## Generate Go code from SQL using sqlc
+	@$(SQLC) generate -f db/sqlc.yaml
 
 .PHONY: migrate-up
 migrate-up: ## Run DB migrations
