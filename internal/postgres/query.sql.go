@@ -18,9 +18,9 @@ VALUES ($1, $2, $3)
 `
 
 type CreateClusterParams struct {
-	Name         string `json:"name"`
-	ApiServerUrl string `json:"api_server_url"`
-	Token        string `json:"token"`
+	Name         string
+	ApiServerUrl string
+	Token        string
 }
 
 func (q *Queries) CreateCluster(ctx context.Context, arg CreateClusterParams) (Cluster, error) {
@@ -106,10 +106,10 @@ WHERE id = $1
 `
 
 type UpdateClusterParams struct {
-	ID           uuid.UUID `json:"id"`
-	Name         string    `json:"name"`
-	ApiServerUrl string    `json:"api_server_url"`
-	Token        string    `json:"token"`
+	ID           uuid.UUID
+	Name         string
+	ApiServerUrl string
+	Token        string
 }
 
 func (q *Queries) UpdateCluster(ctx context.Context, arg UpdateClusterParams) (Cluster, error) {

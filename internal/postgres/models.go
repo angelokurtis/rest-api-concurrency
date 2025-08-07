@@ -11,15 +11,15 @@ import (
 )
 
 type Cluster struct {
-	ID           uuid.UUID `json:"id"`
-	Name         string    `json:"name"`
-	ApiServerUrl string    `json:"api_server_url"`
-	Token        string    `json:"token"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	ID           uuid.UUID
+	Name         string
+	ApiServerUrl string
+	Token        string
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }
 
 type SchemaMigration struct {
-	Version int64 `json:"version"`
-	Dirty   bool  `json:"dirty"`
+	Version int64
+	Dirty   bool
 }
