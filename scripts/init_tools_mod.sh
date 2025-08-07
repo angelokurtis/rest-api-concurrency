@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-set -xe
+set -euo pipefail
 
 rm -rf go.tools.mod go.tools.sum
-go mod init github.com/angelokurtis/rest-api-concurrency/tools -modfile=go.tools.mod
+TMP_DIR=$(mktemp -d)
+cd "$TMP_DIR"
+go mod init github.com/angelokurtis/rest-api-concurrency/tools
+mv go.mod "$OLDPWD/go.tools.mod"
+cd "$OLDPWD"
+rm -rf "$TMP_DIR"
