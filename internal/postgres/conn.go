@@ -2,11 +2,11 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"os"
 
 	pgx "github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgconn"
 
 	"github.com/angelokurtis/rest-api-concurrency/internal/errors"
 )
@@ -14,11 +14,11 @@ import (
 func NewConnection(ctx context.Context) (*pgx.Conn, func(), error) {
 	cleanup := func() {}
 
-	conn, err := pgx.ConnectConfig(ctx, &pgx.ConnConfig{Config: pgconn.Config{
-		Database: os.Getenv("POSTGRES_DB"),
-		User:     os.Getenv("POSTGRES_USER"),
-		Password: os.Getenv("POSTGRES_PASSWORD"),
-	}})
+	database := os.Getenv("POSTGRES_DB")
+	user := os.Getenv("POSTGRES_USER")
+	password := os.Getenv("POSTGRES_PASSWORD")
+
+	conn, err := pgx.Connect(ctx, fmt.Sprintf("postgres://%s:%s@localhost:5432/%s?sslmode=disable", user, password, database))
 	if err != nil {
 		return nil, cleanup, errors.WithStack(err)
 	}
