@@ -1,3 +1,6 @@
+-- This schema is extracted from the database and used solely for sqlc code generation.
+-- Do not manually edit this file. Use 'make dump-schema' to regenerate.
+
 --
 -- PostgreSQL database dump
 --
