@@ -12,25 +12,31 @@ import (
 )
 
 const createCluster = `-- name: CreateCluster :one
-INSERT INTO clusters (name, api_server_url, token)
-VALUES ($1, $2, $3)
-    RETURNING id, name, api_server_url, token, created_at, updated_at
+INSERT INTO clusters (name, version, provider, region)
+VALUES ($1, $2, $3, $4) RETURNING id, name, version, provider, region, created_at, updated_at
 `
 
 type CreateClusterParams struct {
-	Name         string
-	ApiServerUrl string
-	Token        string
+	Name     string
+	Version  string
+	Provider string
+	Region   string
 }
 
 func (q *Queries) CreateCluster(ctx context.Context, arg CreateClusterParams) (Cluster, error) {
-	row := q.db.QueryRowContext(ctx, createCluster, arg.Name, arg.ApiServerUrl, arg.Token)
+	row := q.db.QueryRowContext(ctx, createCluster,
+		arg.Name,
+		arg.Version,
+		arg.Provider,
+		arg.Region,
+	)
 	var i Cluster
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
-		&i.ApiServerUrl,
-		&i.Token,
+		&i.Version,
+		&i.Provider,
+		&i.Region,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -38,7 +44,9 @@ func (q *Queries) CreateCluster(ctx context.Context, arg CreateClusterParams) (C
 }
 
 const deleteCluster = `-- name: DeleteCluster :exec
-DELETE FROM clusters WHERE id = $1
+DELETE
+FROM clusters
+WHERE id = $1
 `
 
 func (q *Queries) DeleteCluster(ctx context.Context, id uuid.UUID) error {
@@ -47,7 +55,9 @@ func (q *Queries) DeleteCluster(ctx context.Context, id uuid.UUID) error {
 }
 
 const getCluster = `-- name: GetCluster :one
-SELECT id, name, api_server_url, token, created_at, updated_at FROM clusters WHERE id = $1
+SELECT id, name, version, provider, region, created_at, updated_at
+FROM clusters
+WHERE id = $1
 `
 
 func (q *Queries) GetCluster(ctx context.Context, id uuid.UUID) (Cluster, error) {
@@ -56,8 +66,9 @@ func (q *Queries) GetCluster(ctx context.Context, id uuid.UUID) (Cluster, error)
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
-		&i.ApiServerUrl,
-		&i.Token,
+		&i.Version,
+		&i.Provider,
+		&i.Region,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -65,7 +76,9 @@ func (q *Queries) GetCluster(ctx context.Context, id uuid.UUID) (Cluster, error)
 }
 
 const listClusters = `-- name: ListClusters :many
-SELECT id, name, api_server_url, token, created_at, updated_at FROM clusters ORDER BY created_at DESC
+SELECT id, name, version, provider, region, created_at, updated_at
+FROM clusters
+ORDER BY created_at DESC
 `
 
 func (q *Queries) ListClusters(ctx context.Context) ([]Cluster, error) {
@@ -80,8 +93,9 @@ func (q *Queries) ListClusters(ctx context.Context) ([]Cluster, error) {
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
-			&i.ApiServerUrl,
-			&i.Token,
+			&i.Version,
+			&i.Provider,
+			&i.Region,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -100,31 +114,37 @@ func (q *Queries) ListClusters(ctx context.Context) ([]Cluster, error) {
 
 const updateCluster = `-- name: UpdateCluster :one
 UPDATE clusters
-SET name = $2, api_server_url = $3, token = $4, updated_at = now()
-WHERE id = $1
-    RETURNING id, name, api_server_url, token, created_at, updated_at
+SET name       = $2,
+    version    = $3,
+    provider   = $4,
+    region     = $5,
+    updated_at = now()
+WHERE id = $1 RETURNING id, name, version, provider, region, created_at, updated_at
 `
 
 type UpdateClusterParams struct {
-	ID           uuid.UUID
-	Name         string
-	ApiServerUrl string
-	Token        string
+	ID       uuid.UUID
+	Name     string
+	Version  string
+	Provider string
+	Region   string
 }
 
 func (q *Queries) UpdateCluster(ctx context.Context, arg UpdateClusterParams) (Cluster, error) {
 	row := q.db.QueryRowContext(ctx, updateCluster,
 		arg.ID,
 		arg.Name,
-		arg.ApiServerUrl,
-		arg.Token,
+		arg.Version,
+		arg.Provider,
+		arg.Region,
 	)
 	var i Cluster
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
-		&i.ApiServerUrl,
-		&i.Token,
+		&i.Version,
+		&i.Provider,
+		&i.Region,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

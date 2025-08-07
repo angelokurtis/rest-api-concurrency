@@ -11,12 +11,13 @@ import (
 )
 
 type Cluster struct {
-	ID           uuid.UUID
-	Name         string
-	ApiServerUrl string
-	Token        string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	ID        uuid.UUID
+	Name      string
+	Version   string
+	Provider  string
+	Region    string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 type SchemaMigration struct {
