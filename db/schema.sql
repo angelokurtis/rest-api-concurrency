@@ -45,8 +45,9 @@ SET default_table_access_method = heap;
 CREATE TABLE public.clusters (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     name text NOT NULL,
-    api_server_url text NOT NULL,
-    token text NOT NULL,
+    version text NOT NULL,
+    provider text NOT NULL,
+    region text NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
