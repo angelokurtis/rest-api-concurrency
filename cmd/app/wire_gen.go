@@ -8,14 +8,23 @@ package main
 
 import (
 	"context"
+	"github.com/angelokurtis/rest-api-concurrency/internal/postgres"
 	"github.com/angelokurtis/rest-api-concurrency/pkg/app"
 )
 
 // Injectors from wire_inj.go:
 
 func NewRunner(ctx context.Context) (Runner, func(), error) {
-	runner := &app.Runner{}
+	conn, cleanup, err := postgres.NewConnection(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	queries := postgres.New(conn)
+	runner := &app.Runner{
+		PostgreSQL: queries,
+	}
 	return runner, func() {
+		cleanup()
 	}, nil
 }
 

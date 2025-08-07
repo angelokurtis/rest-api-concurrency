@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/google/wire"
+	pgx "github.com/jackc/pgx/v5"
 
 	"github.com/angelokurtis/rest-api-concurrency/internal/httpserver"
 	"github.com/angelokurtis/rest-api-concurrency/internal/postgres"
@@ -14,6 +15,7 @@ var providers = wire.NewSet(
 	httpserver.Providers,
 	postgres.Providers,
 	term.Providers,
+	wire.Bind(new(postgres.DBTX), new(*pgx.Conn)),
 	wire.Bind(new(postgres.Querier), new(*postgres.Queries)),
 	wire.Bind(new(Runner), new(*app.Runner)),
 	wire.Bind(new(term.Renderer), new(*term.MarkdownRenderer)),
