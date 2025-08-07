@@ -10,3 +10,6 @@ go mod init github.com/angelokurtis/rest-api-concurrency/tools
 mv go.mod "$OLDPWD/go.tools.mod"
 cd "$OLDPWD"
 rm -rf "$TMP_DIR"
+
+# Install tools
+go get -modfile=go.tools.mod -tool github.com/golang-migrate/migrate/v4/cmd/migrate@latest
