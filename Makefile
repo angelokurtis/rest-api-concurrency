@@ -1,6 +1,7 @@
-ifneq (,$(wildcard ./.env))
+# Load environment variables from .env file if present
+ifneq (,$(wildcard .env))
 	include .env
-	export $(shell sed 's/=.*//' .env)
+	export $(shell grep -v '^#' .env | sed '/^\s*$$/d' | sed 's/=.*//' )
 endif
 
 SHELL = /usr/bin/env bash -o pipefail
