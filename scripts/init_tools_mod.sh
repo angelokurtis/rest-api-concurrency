@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+# Initialize a new Go module for tools
 rm -rf go.tools.mod go.tools.sum
 TMP_DIR=$(mktemp -d)
 cd "$TMP_DIR"
