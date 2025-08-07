@@ -13,5 +13,5 @@ rm -rf "$TMP_DIR"
 
 # Install tools
 set -x
-go get -modfile=tools.mod -tool github.com/google/wire/cmd/wire@latest
 go get -modfile=tools.mod -tool github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+go get -modfile=tools.mod -tool github.com/google/wire/cmd/wire@latest
