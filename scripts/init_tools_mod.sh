@@ -13,4 +13,5 @@ rm -rf "$TMP_DIR"
 
 # Install tools
 set -x
+go get -tags 'postgres' -modfile=tools.mod -tool -u github.com/golang-migrate/migrate/v4/cmd/migrate
 go get -modfile=tools.mod -tool -u github.com/google/wire/cmd/wire
