@@ -9,6 +9,9 @@ SHELL = /usr/bin/env bash -o pipefail
 COMPOSE = docker-compose
 COMPOSE_FILE = docker-compose.yml
 
+WIRE = go tool -modfile=tools.mod wire
+MIGRATE = go tool -modfile=tools.mod migrate
+
 ##@ Help
 
 .PHONY: help
@@ -19,7 +22,17 @@ help: ## Display this help.
 
 .PHONY: wire
 wire: ## Generate wire dependency injection code
-	go tool -modfile=tools.mod wire ./cmd/app
+	$(WIRE) ./cmd/app
+
+##@ Database
+
+.PHONY: migrate-up
+migrate-up: ## Run DB migrations
+	$(MIGRATE) -path db/migrations -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/$(POSTGRES_DB)?sslmode=disable" up
+
+.PHONY: migrate-down
+migrate-down: ## Roll back last DB migration
+	$(MIGRATE) -path db/migrations -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/$(POSTGRES_DB)?sslmode=disable" down 1
 
 ##@ Docker Compose
 
