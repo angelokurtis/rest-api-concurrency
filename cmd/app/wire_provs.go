@@ -14,6 +14,7 @@ var providers = wire.NewSet(
 	httpserver.Providers,
 	postgres.Providers,
 	term.Providers,
+	wire.Bind(new(postgres.Querier), new(*postgres.Queries)),
 	wire.Bind(new(Runner), new(*app.Runner)),
 	wire.Bind(new(term.Renderer), new(*term.MarkdownRenderer)),
 	wire.Struct(new(app.Runner), "*"),
