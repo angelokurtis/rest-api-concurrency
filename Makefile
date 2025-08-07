@@ -11,6 +11,9 @@ COMPOSE = docker compose
 COMPOSE_FILE = compose.yaml
 
 WIRE = go tool -modfile=tools.mod wire
+# Use `go run` for golang-migrate instead of `go tool` due to a known limitation:
+# `go tool` does not respect build tags (like `postgres`), which causes a missing driver error.
+# See: https://github.com/golang-migrate/migrate/issues/1232
 MIGRATE = go run -mod=mod -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.18.3
 
 ##@ Help
