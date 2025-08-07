@@ -7,8 +7,8 @@ endif
 SHELL = /usr/bin/env bash -o pipefail
 .SHELLFLAGS = -ec
 
-COMPOSE = docker-compose
-COMPOSE_FILE = docker-compose.yml
+COMPOSE = docker compose
+COMPOSE_FILE = compose.yaml
 
 WIRE = go tool -modfile=tools.mod wire
 MIGRATE = go tool -modfile=tools.mod migrate
