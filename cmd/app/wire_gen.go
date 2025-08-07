@@ -9,19 +9,26 @@ package main
 import (
 	"context"
 	"github.com/angelokurtis/rest-api-concurrency/internal/postgres"
+	"github.com/angelokurtis/rest-api-concurrency/internal/term"
 	"github.com/angelokurtis/rest-api-concurrency/pkg/app"
 )
 
 // Injectors from wire_inj.go:
 
 func NewRunner(ctx context.Context) (Runner, func(), error) {
+	termRenderer, err := term.NewGlamourTermRenderer()
+	if err != nil {
+		return nil, nil, err
+	}
+	markdownRenderer := term.NewMarkdownRenderer(termRenderer)
 	conn, cleanup, err := postgres.NewConnection(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
 	queries := postgres.New(conn)
 	runner := &app.Runner{
-		PostgreSQL: queries,
+		Renderer: markdownRenderer,
+		Querier:  queries,
 	}
 	return runner, func() {
 		cleanup()
