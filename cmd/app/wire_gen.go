@@ -27,8 +27,8 @@ func NewRunner(ctx context.Context) (Runner, func(), error) {
 	}
 	queries := db.New(conn)
 	runner := &app.Runner{
-		Renderer: markdownRenderer,
-		Querier:  queries,
+		Renderer:          markdownRenderer,
+		ClusterRepository: queries,
 	}
 	return runner, func() {
 		cleanup()
