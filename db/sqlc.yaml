@@ -10,7 +10,5 @@ sql:
         package: "db"
         out: "../internal/db"
         sql_package: "pgx/v5"
-        emit_empty_slices: false
-        emit_interface: false
-        emit_json_tags: false
-        emit_prepared_queries: false
+        emit_params_struct_pointers: false
+        emit_result_struct_pointers: true

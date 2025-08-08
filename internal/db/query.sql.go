@@ -23,7 +23,7 @@ type CreateClusterParams struct {
 	Region   string
 }
 
-func (q *Queries) CreateCluster(ctx context.Context, arg CreateClusterParams) (Cluster, error) {
+func (q *Queries) CreateCluster(ctx context.Context, arg CreateClusterParams) (*Cluster, error) {
 	row := q.db.QueryRow(ctx, createCluster,
 		arg.Name,
 		arg.Version,
@@ -40,7 +40,7 @@ func (q *Queries) CreateCluster(ctx context.Context, arg CreateClusterParams) (C
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }
 
 const deleteCluster = `-- name: DeleteCluster :exec
@@ -60,7 +60,7 @@ FROM clusters
 WHERE id = $1
 `
 
-func (q *Queries) GetCluster(ctx context.Context, id pgtype.UUID) (Cluster, error) {
+func (q *Queries) GetCluster(ctx context.Context, id pgtype.UUID) (*Cluster, error) {
 	row := q.db.QueryRow(ctx, getCluster, id)
 	var i Cluster
 	err := row.Scan(
@@ -72,7 +72,7 @@ func (q *Queries) GetCluster(ctx context.Context, id pgtype.UUID) (Cluster, erro
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }
 
 const listClusters = `-- name: ListClusters :many
@@ -81,13 +81,13 @@ FROM clusters
 ORDER BY created_at DESC
 `
 
-func (q *Queries) ListClusters(ctx context.Context) ([]Cluster, error) {
+func (q *Queries) ListClusters(ctx context.Context) ([]*Cluster, error) {
 	rows, err := q.db.Query(ctx, listClusters)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Cluster
+	var items []*Cluster
 	for rows.Next() {
 		var i Cluster
 		if err := rows.Scan(
@@ -101,7 +101,7 @@ func (q *Queries) ListClusters(ctx context.Context) ([]Cluster, error) {
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -127,7 +127,7 @@ type UpdateClusterParams struct {
 	Region   string
 }
 
-func (q *Queries) UpdateCluster(ctx context.Context, arg UpdateClusterParams) (Cluster, error) {
+func (q *Queries) UpdateCluster(ctx context.Context, arg UpdateClusterParams) (*Cluster, error) {
 	row := q.db.QueryRow(ctx, updateCluster,
 		arg.ID,
 		arg.Name,
@@ -145,5 +145,5 @@ func (q *Queries) UpdateCluster(ctx context.Context, arg UpdateClusterParams) (C
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
-	return i, err
+	return &i, err
 }
