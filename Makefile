@@ -35,28 +35,6 @@ wire: ## Generate wire dependency injection code
 sqlc-generate: ## Generate Go code from SQL using sqlc
 	@$(SQLC) generate -f db/sqlc.yaml
 
-.PHONY: dump-schema
-dump-schema: ## Dump schema using Dockerized pg_dump
-	@docker run --rm \
-	-v $(PWD)/db:/schema \
-	-e PGPASSWORD=$(POSTGRES_PASSWORD) \
-	--network=host \
-	postgres:17.5 \
-	pg_dump \
-	--host=localhost \
-	--username=$(POSTGRES_USER) \
-	--schema-only \
-	--no-owner \
-	--no-privileges \
-	--file=/schema/schema.sql \
-	$(POSTGRES_DB)
-	@echo "-- This schema is extracted from the database and used solely for sqlc code generation." > db/schema.tmp.sql
-	@echo "-- Do not manually edit this file. Use 'make dump-schema' to regenerate." >> db/schema.tmp.sql
-	@echo "" >> db/schema.tmp.sql
-	@cat db/schema.sql >> db/schema.tmp.sql
-	@cp db/schema.tmp.sql db/schema.sql
-	@rm db/schema.tmp.sql
-
 .PHONY: migrate-up
 migrate-up: ## Run DB migrations
 	@$(MIGRATE) -path db/migrations -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/$(POSTGRES_DB)?sslmode=disable" up

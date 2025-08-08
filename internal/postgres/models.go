@@ -17,8 +17,3 @@ type Cluster struct {
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
-
-type SchemaMigration struct {
-	Version int64
-	Dirty   bool
-}
