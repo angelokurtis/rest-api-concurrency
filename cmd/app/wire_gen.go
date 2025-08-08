@@ -8,7 +8,7 @@ package main
 
 import (
 	"context"
-	"github.com/angelokurtis/rest-api-concurrency/internal/postgres"
+	"github.com/angelokurtis/rest-api-concurrency/internal/db"
 	"github.com/angelokurtis/rest-api-concurrency/internal/term"
 	"github.com/angelokurtis/rest-api-concurrency/pkg/app"
 )
@@ -21,11 +21,11 @@ func NewRunner(ctx context.Context) (Runner, func(), error) {
 		return nil, nil, err
 	}
 	markdownRenderer := term.NewMarkdownRenderer(termRenderer)
-	conn, cleanup, err := postgres.NewConnection(ctx)
+	conn, cleanup, err := db.NewConnection(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
-	queries := postgres.New(conn)
+	queries := db.New(conn)
 	runner := &app.Runner{
 		Renderer: markdownRenderer,
 		Querier:  queries,

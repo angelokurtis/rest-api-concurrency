@@ -33,7 +33,8 @@ wire: ## Generate wire dependency injection code
 
 .PHONY: sqlc-generate
 sqlc-generate: ## Generate Go code from SQL using sqlc
-	@rm -rf ./internal/db
+	@find ./internal/db -type f ! -name 'conn.go' ! -name 'wire_provs.go' -delete
+	@find ./internal/db -type d -empty -delete
 	@$(SQLC) generate -f db/sqlc.yaml
 
 .PHONY: migrate-up
