@@ -10,6 +10,7 @@ sql:
         package: "db"
         out: "../internal/db"
         sql_package: "pgx/v5"
+        emit_interface: false
         emit_params_struct_pointers: false
         emit_result_struct_pointers: true
         omit_unused_structs: true
