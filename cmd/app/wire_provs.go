@@ -10,13 +10,12 @@ import (
 	"github.com/angelokurtis/rest-api-concurrency/pkg/app"
 )
 
-//nolint:unused // This function is used during compile-time to generate code for dependency injection
 var providers = wire.NewSet(
-	httpserver.Providers,
 	db.Providers,
+	httpserver.Providers,
 	term.Providers,
+	wire.Bind(new(db.ClusterRepository), new(*db.Queries)),
 	wire.Bind(new(db.DBTX), new(*pgx.Conn)),
-	wire.Bind(new(db.Querier), new(*db.Queries)),
 	wire.Bind(new(Runner), new(*app.Runner)),
 	wire.Bind(new(term.Renderer), new(*term.MarkdownRenderer)),
 	wire.Struct(new(app.Runner), "*"),

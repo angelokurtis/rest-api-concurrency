@@ -10,7 +10,7 @@ import (
 
 type Runner struct {
 	term.Renderer
-	db.Querier
+	db.ClusterRepository
 }
 
 func (r *Runner) Run(ctx context.Context) error {
