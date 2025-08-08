@@ -12,3 +12,6 @@ sql:
         sql_package: "pgx/v5"
         emit_params_struct_pointers: false
         emit_result_struct_pointers: true
+        omit_unused_structs: true
+        initialisms:
+          - id
