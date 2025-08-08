@@ -7,8 +7,8 @@ sql:
       uri: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}"
     gen:
       go:
-        package: "postgres"
-        out: "../internal/postgres"
+        package: "db"
+        out: "../internal/db"
         sql_package: "pgx/v5"
         emit_interface: true
         emit_json_tags: false
